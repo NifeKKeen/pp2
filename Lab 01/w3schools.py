@@ -1,4 +1,3 @@
-# HOME
 print("Topic - HOME")
 
 print("Hello, Nikita!")
