@@ -1,4 +1,4 @@
-import itertools, math, random
+import math, random
 
 
 def convert_from_gram_to_ounce(from_x):
@@ -34,8 +34,24 @@ def filter_prime(arr):
 
 
 def print_all_permutations(s):
-  for perm in itertools.permutations(s):
-    print("".join(perm))
+  cnt = dict()
+  for ch in s:
+    if cnt.get(ch) == None:
+      cnt[ch] = 0
+    cnt[ch] += 1
+
+  def rec(cur = ""):
+    if len(cur) == len(s):
+      print(cur)
+      return
+    
+    for ch, chCnt in cnt.items():
+      if chCnt:
+        cnt[ch] -= 1
+        rec(cur + ch)
+        cnt[ch] += 1
+
+  rec()
 
 
 def reverse_sentence(sentence):
