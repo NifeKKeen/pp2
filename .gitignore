@@ -1,5 +1,6 @@
 tempCodeRunnerFile.*
 *.mp3
+database.ini
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
