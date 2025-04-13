@@ -11,16 +11,31 @@ def get_csv_data(path):
       print(row)
 
 
-def get_phonebook_records(limit = None):
+def get_phonebook_records(offset=None, limit=None):
   db = get_db_session()
 
-  with db.cursor() as cursor:
-    cursor.execute(
-      """
-      SELECT * FROM contacts;
-      """
-    )
-    # db.commit()
+  with db.cursor() as cursor: 
+    if limit is not None:
+      cursor.execute(
+        f"""
+        SELECT *
+        FROM contacts
+        OFFSET %s
+        LIMIT %s;
+        """, 
+        (offset if offset is not None else "0", limit)
+      )
+    else:
+      cursor.execute(
+        f"""
+        SELECT *
+        FROM contacts
+        OFFSET %s;
+        """, 
+        (offset if offset is not None else "0")
+      )
+
+
     data = cursor.fetchall()
     cursor.close()
 
@@ -113,7 +128,15 @@ if __name__ == "__main__":
     try:
       query = input()
       if query == "c":
-        data = get_phonebook_records()
+        offset = None
+        limit = None 
+        inputs = input("offset, limit: ").split()
+        if len(inputs) >= 1:
+          offset = inputs[0]
+        if len(inputs) >= 2:
+          limit = inputs[1]
+
+        data = get_phonebook_records(offset, limit)
         print(data)
       elif query == "i":
         name, phone = input("name, phone: ").split()
